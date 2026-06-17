@@ -4,6 +4,7 @@ import {
   addCandidate,
   updateCandidate,
   deleteCandidate,
+  getElections,
 } from "../api/votezyApi";
 
 const emptyForm = {
@@ -14,6 +15,7 @@ const emptyForm = {
 
 export default function Candidates() {
   const [candidates, setCandidates] = useState([]);
+  const [elections, setElections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
   const [form, setForm] = useState(emptyForm);
@@ -29,14 +31,19 @@ export default function Candidates() {
     setLoadError("");
 
     try {
-      const data = await getCandidates();
-      setCandidates(data);
+      const [candidatesData, electionsData] = await Promise.all([
+        getCandidates(),
+        getElections(),
+      ]);
+      setCandidates(candidatesData);
+      setElections(electionsData);
     } catch (err) {
       setLoadError(err.message);
     } finally {
       setLoading(false);
     }
   }
+
 
   useEffect(() => {
     loadCandidates();
@@ -81,7 +88,7 @@ export default function Candidates() {
       !form.electionId
     ) {
       setFormMsg({
-        text: "Please enter name, party and election ID.",
+        text: "Please enter name, party and select an election.",
         isError: true,
       });
       return;
@@ -175,13 +182,11 @@ export default function Candidates() {
         />
 
         <label htmlFor="electionId">
-          Election ID
+          Select Election
         </label>
 
-        <input
+        <select
           id="electionId"
-          type="number"
-          placeholder="e.g. 1"
           value={form.electionId}
           onChange={(e) =>
             setForm({
@@ -189,7 +194,15 @@ export default function Candidates() {
               electionId: e.target.value,
             })
           }
-        />
+        >
+          <option value="">Choose Election</option>
+          {elections.map((election) => (
+            <option key={election.id} value={election.id}>
+              {election.electionName} (ID: {election.id})
+            </option>
+          ))}
+        </select>
+
 
         <button
           type="submit"

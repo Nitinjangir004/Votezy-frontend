@@ -7,12 +7,13 @@ export async function apiCall(path, options = {}) {
   });
 
   const text = await res.text();
-  let body = null;
+  let body;
   try {
     body = text ? JSON.parse(text) : null;
   } catch {
     body = text;
   }
+
 
   if (!res.ok) {
     const msg =
@@ -67,5 +68,11 @@ export const declareResult = (electionName) =>
     method: "POST",
     body: JSON.stringify({ electionName }),
   });
-  export const getElections = () => apiCall("/elections");
+export const getElections = () => apiCall("/elections");
+export const createElection = (electionName) =>
+  apiCall("/elections/add", {
+    method: "POST",
+    body: JSON.stringify({ electionName }),
+  });
 export const getAllResults = () => apiCall("/election-result");
+
