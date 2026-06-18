@@ -243,11 +243,7 @@ return ( <div className="container"> <h2>Declare Election Result</h2>
                   <div
                     className="vote-bar-fill"
                     style={{
-                      width: `${
-                        (c.voteCount /
-                          maxVotes) *
-                        100
-                      }%`,
+                      width: `${(c.voteCount / maxVotes) * 100}%`,
                     }}
                   ></div>
                 </div>
