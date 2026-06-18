@@ -27,7 +27,7 @@ async function loadResults() {
 setLoading(true);
 setLoadError("");
 
-```
+
 try {
   const [
     resultsData,
@@ -47,7 +47,10 @@ try {
 } finally {
   setLoading(false);
 }
-```
+  useEffect(() => {
+  console.log("Candidates:", candidates);
+}, [candidates]);
+
 
 }
 
@@ -91,7 +94,6 @@ try {
 }
 
 const candMap = {};
-console.log(candidates);
 candidates.forEach((c) => {
 candMap[c.id] = c;
 });
