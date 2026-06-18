@@ -91,7 +91,7 @@ try {
 }
 
 const candMap = {};
-
+console.log(candidates);
 candidates.forEach((c) => {
 candMap[c.id] = c;
 });
